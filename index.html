@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeLink - Rescue Intelligence</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            🩸 <span>LifeLink</span>
+        </div>
+
+        <div class="nav-title">Main</div>
+
+        <div class="nav-item active" data-view="dashboard">
+            📊 <span>Dashboard</span>
+        </div>
+
+        <div class="nav-item" data-view="emergency-requests">
+            🚨 <span>Emergency Requests</span>
+        </div>
+
+        <div class="nav-item" data-view="donors">
+            🩸 <span>Donors</span>
+        </div>
+
+        <div class="nav-item" data-view="blood-banks">
+            🏦 <span>Blood Banks</span>
+        </div>
+
+        <div class="nav-item" data-view="hospitals">
+            🏥 <span>Hospitals</span>
+        </div>
+
+        <div class="nav-title">Intelligence</div>
+
+        <div class="nav-item" data-view="smart-matching">
+            🧠 <span>Smart Matching</span>
+        </div>
+
+        <div class="nav-item" data-view="analytics">
+            📈 <span>Analytics</span>
+        </div>
+
+        <div class="nav-item" data-view="donation-camps">
+            📅 <span>Donation Camps</span>
+        </div>
+
+        <div class="nav-title">Community</div>
+
+        <div class="nav-item" data-view="rewards">
+            🏆 <span>Rewards</span>
+        </div>
+
+        <div class="nav-item" data-view="feedback">
+            ⭐ <span>Feedback</span>
+        </div>
+
+        <div class="nav-item" data-view="settings">
+            ⚙️ <span>Settings</span>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+
+            <div class="page-title">
+                <h1>Rescue Intelligence</h1>
+                <p>Real-time blood emergency coordination</p>
+            </div>
+
+            <div class="top-actions">
+
+                <select class="language" id="language" aria-label="Language">
+                    <option>English</option>
+                    <option>தமிழ்</option>
+                    <option>हिन्दी</option>
+                </select>
+
+                <button class="notification has-unread" id="notificationBell"
+                    onclick="showNotifications()" aria-label="Notifications">
+                    🔔
+                </button>
+
+                <div class="profile">
+                    <div class="avatar">JR</div>
+                    <div>
+                        <strong>Admin</strong>
+                        <small>Hospital Coordinator</small>
+                    </div>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+        <section class="content">
+
+            <!-- EMERGENCY BANNER -->
+
+            <div class="emergency-banner">
+
+                <div>
+                    <h2>🚨 Emergency Blood Coordination</h2>
+                    <p>
+                        Monitor active emergencies and coordinate donors,
+                        hospitals and blood banks.
+                    </p>
+                </div>
+
+                <button class="sos-btn" onclick="openModal()">
+                    + Create Emergency
+                </button>
+
+            </div>
+
+
+            <!-- STATISTICS -->
+
+            <div class="stats">
+
+                <div class="stat-card" id="statActiveEmergenciesCard">
+                    <div class="stat-top">
+                        <p>Active Emergencies</p>
+                        <div class="stat-icon">🚨</div>
+                    </div>
+                    <h3 id="statActiveEmergencies">12</h3>
+                    <div class="positive">↑ 3 today</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <p>Available Donors</p>
+                        <div class="stat-icon">🩸</div>
+                    </div>
+                    <h3 id="statAvailableDonors">1,248</h3>
+                    <div class="positive">↑ 8.4%</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <p>Partner Hospitals</p>
+                        <div class="stat-icon">🏥</div>
+                    </div>
+                    <h3>26</h3>
+                    <div class="positive">Active network</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <p>Blood Banks</p>
+                        <div class="stat-icon">🏦</div>
+                    </div>
+                    <h3>18</h3>
+                    <div class="positive">Live sync</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <p>Resolved</p>
+                        <div class="stat-icon">✅</div>
+                    </div>
+                    <h3>3,842</h3>
+                    <div class="positive">94.7% success</div>
+                </div>
+
+            </div>
+
+
+            <!-- DASHBOARD VIEW (default) -->
+            <div id="dashboardView">
+
+                <!-- FIRST ROW -->
+
+                <div class="dashboard-grid">
+
+                    <!-- EMERGENCY COMMAND CENTER -->
+
+                    <div class="card emergency-card">
+
+                        <div class="card-header">
+
+                            <div>
+                                <h2>🚨 Emergency Command Center</h2>
+                                <p>Currently active critical request</p>
+                            </div>
+
+                            <span class="critical" id="criticalBadge">CRITICAL</span>
+
+                        </div>
+
+                        <div class="request-header">
+                            <span class="request-id" id="requestId">Request #LL1024</span>
+                            <span class="request-id" id="requestAge">2 minutes ago</span>
+                        </div>
+
+                        <div class="blood-needed">
+
+                            <div class="blood-circle" id="requestBloodType">
+                                O+
+                            </div>
+
+                            <div>
+                                <h2 id="requestUnits">2 Units Required</h2>
+                                <p id="requestHospitalName">🏥 XYZ Multispeciality Hospital</p>
+                                <p>📍 4.2 km from current center</p>
+                            </div>
+
+                        </div>
+
+                        <div class="progress-title">
+                            <span>Emergency response progress</span>
+                            <strong id="progressPercent">70%</strong>
+                        </div>
+
+                        <div class="progress">
+                            <div class="progress-bar" id="progressBar"></div>
+                        </div>
+
+                        <div class="emergency-stats">
+
+                            <div class="mini-box">
+                                <strong id="miniSuitable">18</strong>
+                                <span>Suitable Donors</span>
+                            </div>
+
+                            <div class="mini-box">
+                                <strong id="miniNotified">6</strong>
+                                <span>Notified</span>
+                            </div>
+
+                            <div class="mini-box">
+                                <strong id="miniAccepted">2</strong>
+                                <span>Accepted</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- MAP -->
+
+                    <div class="card">
+
+                        <div class="card-header">
+                            <div>
+                                <h2>📍 Rescue Map</h2>
+                                <p>Nearby donors &amp; blood banks (static preview — not yet a live map)</p>
+                            </div>
+
+                            <button class="view-btn" onclick="toast('Full map view is planned for a future version.', 'warning')">
+                                Full Map
+                            </button>
+                        </div>
+
+                        <div class="map">
+
+                            <div class="map-pin hospital-pin"></div>
+
+                            <div class="map-pin donor-pin p1"></div>
+                            <div class="map-pin donor-pin p2"></div>
+                            <div class="map-pin donor-pin p3"></div>
+                            <div class="map-pin donor-pin p4"></div>
+
+                            <div class="map-label hospital-label">
+                                🏥 Hospital
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SECOND ROW -->
+
+                <div class="dashboard-grid" style="margin-top:20px;">
+
+                    <!-- SMART MATCH -->
+
+                    <div class="card">
+
+                        <div class="card-header">
+                            <div>
+                                <h2>🧠 Smart Donor Matches</h2>
+                                <p>Ranked by suitability + ETA</p>
+                            </div>
+
+                            <button class="view-btn" onclick="toast('Full donor list is planned for a future version.', 'warning')">
+                                View All
+                            </button>
+                        </div>
+
+
+                        <div class="match">
+
+                            <div class="donor-info">
+
+                                <div class="donor-avatar">
+                                    AK
+                                </div>
+
+                                <div>
+                                    <strong>Donor #1048</strong>
+                                    <span>O+ • 2.4 km • ETA 7 min</span>
+                                </div>
+
+                            </div>
+
+                            <div class="match-score">
+                                <div class="score">96% Match</div>
+                                <button class="notify-btn"
+                                    onclick="notifyDonor(this, 'Donor #1048')">
+                                    Notify
+                                </button>
+                            </div>
+
+                        </div>
+
+
+                        <div class="match">
+
+                            <div class="donor-info">
+
+                                <div class="donor-avatar">
+                                    RS
+                                </div>
+
+                                <div>
+                                    <strong>Donor #2187</strong>
+                                    <span>O+ • 3.1 km • ETA 9 min</span>
+                                </div>
+
+                            </div>
+
+                            <div class="match-score">
+                                <div class="score">91% Match</div>
+                                <button class="notify-btn"
+                                    onclick="notifyDonor(this, 'Donor #2187')">
+                                    Notify
+                                </button>
+                            </div>
+
+                        </div>
+
+
+                        <div class="match">
+
+                            <div class="donor-info">
+
+                                <div class="donor-avatar">
+                                    VP
+                                </div>
+
+                                <div>
+                                    <strong>Donor #3342</strong>
+                                    <span>O+ • 4.8 km • ETA 12 min</span>
+                                </div>
+
+                            </div>
+
+                            <div class="match-score">
+                                <div class="score">87% Match</div>
+                                <button class="notify-btn"
+                                    onclick="notifyDonor(this, 'Donor #3342')">
+                                    Notify
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- STATUS TIMELINE -->
+
+                    <div class="card">
+
+                        <div class="card-header">
+
+                            <div>
+                                <h2>🔄 Request Timeline</h2>
+                                <p>#LL1024</p>
+                            </div>
+
+                        </div>
+
+                        <div class="timeline">
+
+                            <div class="timeline-item">
+                                <strong>Emergency Request Created</strong>
+                                <span>10:31 AM</span>
+                            </div>
+
+                            <div class="timeline-item">
+                                <strong>Hospital Verified</strong>
+                                <span>10:32 AM</span>
+                            </div>
+
+                            <div class="timeline-item">
+                                <strong>Smart Matching Started</strong>
+                                <span>10:33 AM</span>
+                            </div>
+
+                            <div class="timeline-item">
+                                <strong>6 Donors Notified</strong>
+                                <span>10:34 AM</span>
+                            </div>
+
+                            <div class="timeline-item">
+                                <strong>2 Donors Accepted</strong>
+                                <span>10:36 AM</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- LOWER SECTION -->
+
+                <div class="lower-grid">
+
+                    <!-- BLOOD BANK -->
+
+                    <div class="card">
+
+                        <div class="card-header">
+                            <div>
+                                <h2>🏦 Blood Bank Inventory</h2>
+                                <p>Live partner stock</p>
+                            </div>
+                            <button class="view-btn" onclick="toast('Full inventory view is planned for a future version.', 'warning')">View</button>
+                        </div>
+
+
+                        <div class="blood-row">
+
+                            <div class="blood-type">O+</div>
+
+                            <div class="stock-details">
+                                <div>
+                                    <span>Available</span>
+                                    <strong>15 units</strong>
+                                </div>
+
+                                <div class="stock-bar">
+                                    <div class="stock-fill" style="width:75%"></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="blood-row">
+
+                            <div class="blood-type">A+</div>
+
+                            <div class="stock-details">
+                                <div>
+                                    <span>Available</span>
+                                    <strong>18 units</strong>
+                                </div>
+
+                                <div class="stock-bar">
+                                    <div class="stock-fill" style="width:85%"></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="blood-row">
+
+                            <div class="blood-type">B+</div>
+
+                            <div class="stock-details">
+                                <div>
+                                    <span>Available</span>
+                                    <strong>21 units</strong>
+                                </div>
+
+                                <div class="stock-bar">
+                                    <div class="stock-fill" style="width:90%"></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="blood-row">
+
+                            <div class="blood-type">O−</div>
+
+                            <div class="stock-details">
+                                <div>
+                                    <span>Low Stock</span>
+                                    <strong>2 units</strong>
+                                </div>
+
+                                <div class="stock-bar">
+                                    <div class="stock-fill low" style="width:20%"></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- RESCUE RADIUS -->
+
+                    <div class="card">
+
+                        <div class="card-header">
+                            <div>
+                                <h2>📡 Rescue Radius</h2>
+                                <p>Automatic search expansion</p>
+                            </div>
+                        </div>
+
+
+                        <div class="radius-item">
+
+                            <div class="radius-left">
+                                <div class="radius-circle">1</div>
+
+                                <div>
+                                    <strong>0–5 km</strong>
+                                    <p style="font-size:10px;color:#777">
+                                        Immediate area
+                                    </p>
+                                </div>
+                            </div>
+
+                            <strong>12 donors</strong>
+
+                        </div>
+
+
+                        <div class="radius-item">
+
+                            <div class="radius-left">
+                                <div class="radius-circle">2</div>
+
+                                <div>
+                                    <strong>5–10 km</strong>
+                                    <p style="font-size:10px;color:#777">
+                                        Expanded search
+                                    </p>
+                                </div>
+                            </div>
+
+                            <strong>31 donors</strong>
+
+                        </div>
+
+
+                        <div class="radius-item">
+
+                            <div class="radius-left">
+                                <div class="radius-circle">3</div>
+
+                                <div>
+                                    <strong>10–20 km</strong>
+                                    <p style="font-size:10px;color:#777">
+                                        Wider network
+                                    </p>
+                                </div>
+                            </div>
+
+                            <strong>87 donors</strong>
+
+                        </div>
+
+
+                        <div class="radius-item">
+
+                            <div class="radius-left">
+                                <div class="radius-circle">4</div>
+
+                                <div>
+                                    <strong>20+ km</strong>
+                                    <p style="font-size:10px;color:#777">
+                                        Emergency broadcast
+                                    </p>
+                                </div>
+                            </div>
+
+                            <strong>214 donors</strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PREDICTIVE ANALYTICS -->
+
+                    <div class="card">
+
+                        <div class="card-header">
+
+                            <div>
+                                <h2>📊 Demand Analytics</h2>
+                                <p>Blood demand overview</p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="chart">
+
+                            <div class="bar" style="height:60%">
+                                <span>O+</span>
+                            </div>
+
+                            <div class="bar" style="height:78%">
+                                <span>A+</span>
+                            </div>
+
+                            <div class="bar" style="height:52%">
+                                <span>B+</span>
+                            </div>
+
+                            <div class="bar" style="height:35%">
+                                <span>AB+</span>
+                            </div>
+
+                            <div class="bar" style="height:72%">
+                                <span>O−</span>
+                            </div>
+
+                            <div class="bar" style="height:88%">
+                                <span>A−</span>
+                            </div>
+
+                        </div>
+
+
+                        <div class="prediction">
+
+                            <strong>🔮 AI Prediction</strong>
+
+                            <p style="font-size:11px;margin-top:5px;">
+                                A− demand may increase in the selected region.
+                                Consider increasing donor outreach.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DONOR REWARDS -->
+
+                <div class="card" style="margin-top:20px;">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h2>🏆 Donor Engagement</h2>
+                            <p>Community participation</p>
+                        </div>
+
+                        <button class="view-btn" onclick="toast('Full leaderboard is planned for a future version.', 'warning')">
+                            Leaderboard
+                        </button>
+
+                    </div>
+
+                    <div class="reward">
+
+                        <div class="reward-icon">
+                            🏆
+                        </div>
+
+                        <div>
+                            <strong>Community Lifesaver Program</strong>
+                            <p style="font-size:11px;color:#777;">
+                                Encourage regular voluntary blood donation
+                            </p>
+                            <div class="points">
+                                ⭐ 12,480 Lifesaver Points
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- /dashboardView -->
+
+            <!-- PLACEHOLDER VIEW for sections not yet built -->
+            <div id="placeholderView" class="placeholder-view" style="display:none;"></div>
+
+
+            <div class="footer">
+                LifeLink © 2026 | Real-Time Blood Emergency Coordination Platform
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- EMERGENCY MODAL -->
+
+<div class="modal" id="emergencyModal" role="dialog" aria-modal="true" aria-labelledby="emergencyModalTitle">
+
+    <div class="modal-content">
+
+        <h2 id="emergencyModalTitle">🚨 Create Emergency Request</h2>
+
+        <div class="form-group">
+            <label for="bloodGroup">Blood Group</label>
+
+            <select id="bloodGroup">
+                <option>O+</option>
+                <option>O−</option>
+                <option>A+</option>
+                <option>A−</option>
+                <option>B+</option>
+                <option>B−</option>
+                <option>AB+</option>
+                <option>AB−</option>
+            </select>
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="units">Units Required</label>
+
+            <input type="number" id="units" value="1" min="1">
+
+        </div>
+
+
+        <div class="form-group" id="hospitalGroup">
+
+            <label for="hospital">Hospital</label>
+
+            <input
+                type="text"
+                id="hospital"
+                placeholder="Enter hospital name"
+            >
+            <div class="error-text">Please enter the hospital name.</div>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="urgency">Urgency</label>
+
+            <select id="urgency">
+                <option>Critical</option>
+                <option>Urgent</option>
+                <option>Normal</option>
+            </select>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button
+                class="cancel"
+                onclick="closeModal()">
+                Cancel
+            </button>
+
+            <button
+                class="submit"
+                onclick="createEmergency()">
+                Activate LifeLink
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
